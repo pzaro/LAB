@@ -269,7 +269,7 @@
 <div class="container" id="mainApp">
     <div class="app-header">
         <h1>ZARKOLIA LAB</h1>
-        <span class="version">Production System v37</span>
+        <span class="version">Production System v38</span>
         <div class="font-ctrl">
             <span class="font-ctrl-label" style="font-size:.85em;">Α</span>
             <button class="font-btn" onclick="changeFontSize(-1)">−</button>
@@ -285,7 +285,8 @@
             <option value="" disabled selected>-- Επιλέξτε από τη λίστα --</option>
             <optgroup label="— Zplast Classic —">
                 <option value="zplast_classic">ZPLAST CREAM Classic (CPNP)</option>
-                <option value="zplast_classic_wound">ZPLAST CREAM Classic — Wound+ (Allantoin/Panthenol)</option>
+                <option value="zplast_cream_wound_md">ZPLAST CREAM WOUND+ (Classic MD v1 — Barrier)</option>
+                <option value="zplast_classic_wound">ZPLAST CREAM Classic — Wound+ ΠΕΙΡΑΜΑΤΙΚΗ (Allantoin/Panthenol)</option>
             </optgroup>
             <optgroup label="— Zplast Total Repair —">
                 <option value="zplast">Zplast Total Repair — Skin Repair (v34b)</option>
@@ -551,7 +552,7 @@ const recipes = {
 
     // ── ZPLAST CLASSIC WOUND+ ────────────────────────────────
     zplast_classic_wound: {
-        title: "ZPLAST CREAM — WOUND+", desc: "Classic + Allantoin 0.5% + D-Panthenol 2%", initials: "ZW", shelfLife: 12, type: "standard",
+        title: "ZPLAST CREAM — WOUND+ (ΠΕΙΡΑΜΑΤΙΚΗ)", desc: "Classic + Allantoin 0.5% + D-Panthenol 2%", initials: "ZW", shelfLife: 12, type: "standard",
         woundNote: "Ενισχυμένη επουλωτική έκδοση. Allantoin: επιταχύνει επαναεπιθηλιοποίηση. D-Panthenol: επιδιόρθωση κυτταρικής μεμβράνης. Κατάλληλη για ανοιχτές καθαρές πληγές.",
         ingredients: [
             { name: "--- ΦΑΣΗ Α (ΥΔΑΤΙΚΗ) ---", isHeader: true },
@@ -589,6 +590,46 @@ const recipes = {
             "Ρίψη Φάσης Γ σε Α+Β υπό ισχυρή ανάδευση. Συνεχής ανάδευση κατά ψύξη.",
             "ΦΑΣΗ Δ — <40°C: Thymus, Hippophae dry ext, Mastic, Honey, Alcohol, Phenoxyethanol/EHG.",
             "QC: pH 5.5-6.5 | Sterility check συνιστάται αν προορίζεται για ανοιχτές πληγές.",
+        ]
+    },
+
+    // ── ZPLAST CREAM WOUND+ — CLASSIC MD v1 (BARRIER) ───────
+    zplast_cream_wound_md: {
+        title: "ZPLAST CREAM WOUND+", desc: "Classic MD v1 — Barrier Formula (χωρίς Arnica / Alcohol / Thymus)", initials: "ZM", shelfLife: 12, type: "standard",
+        safetyNote: "Προϊόν φραγμού — υποψήφιο ιατροτεχνολογικό κλάσης I (Κανόνες 1 + 4). Φυσικά προστατευτικά ≈26% (Calamine 8 + Starch 8 + Petrolatum 8 + MAS 2). Για ξηρό, ερεθισμένο, σκασμένο δέρμα και μικρές επιφανειακές εκδορές. ΟΧΙ σε βαθιές, μολυσμένες ή αιμορραγούσες πληγές. Hypericum: αποφυγή έκθεσης στον ήλιο μετά την εφαρμογή.",
+        ingredients: [
+            { name: "--- ΦΑΣΗ Α (ΥΔΑΤΙΚΗ) ---", isHeader: true },
+            { name: "Aqua",                                        pct: 0,    isQS: true, note: "= 56.8%" },
+            { name: "Magnesium Aluminum Silicate",                 pct: 2.0 },
+            { name: "Xanthan Gum",                                 pct: 0.5 },
+            { name: "--- ΦΑΣΗ Β (ΣΚΟΝΕΣ) ---", isHeader: true },
+            { name: "Calamine Powder",                             pct: 8.0 },
+            { name: "Zea Mays Starch",                             pct: 8.0 },
+            { name: "--- ΦΑΣΗ Γ (ΛΙΠΑΡΗ 75°C) ---", isHeader: true },
+            { name: "Xalifin-15 (C12-20 Acid PEG-8 Ester)",       pct: 6.0 },
+            { name: "Petrolatum (Βαζελίνη)",                       pct: 8.0,  isNew: true, note: "6% → 8%, αντικαθιστά Arnica Oil" },
+            { name: "Cetyl Alcohol",                               pct: 1.0 },
+            { name: "Linum Usitatissimum Oil",                     pct: 2.0 },
+            { name: "Avocado Oil",                                 pct: 2.0 },
+            { name: "Hypericum Perforatum Oil",                    pct: 2.0 },
+            { name: "--- ΦΑΣΗ Δ (<40°C) ---", isHeader: true },
+            { name: "Hippophae Rhamnoides Ext (dry 5:1)",          pct: 0.2 },
+            { name: "Pistacia Lentiscus Extract/Gum (Μαστίχα)",   pct: 2.0 },
+            { name: "Honey Extract",                               pct: 0.5 },
+            { name: "Phenoxyethanol/Caprylyl Glycol/EHG",         pct: 1.0 },
+        ],
+        instructions: [
+            "ΦΑΣΗ Α — Θερμάνετε το νερό στους 80°C.",
+            "Διασπείρετε το Magnesium Aluminum Silicate με έντονη ανάδευση. Αφήστε να ενυδατωθεί 10-15 λεπτά.",
+            "Προσθέστε αργά το Xanthan Gum υπό συνεχή ανάδευση — αποφύγετε σβόλους. Ψύξη στους 75°C.",
+            "ΦΑΣΗ Β — Αναμείξτε Calamine + Zea Mays σε ξηρό δοχείο. Ενσωματώστε σταδιακά σε 3-4 δόσεις στη Φάση Α (75°C) με ισχυρή ανάδευση μεταξύ κάθε δόσης.",
+            "ΦΑΣΗ Γ — Τήξη Petrolatum (8%) + Cetyl Alcohol στους 75°C. Προσθήκη Xalifin-15 και λαδιών (Linum, Avocado, Hypericum). Κρατήστε στην άκρη ~2x το βάρος της μαστίχας από το Avocado Oil για το premix του βήματος 8.",
+            "Αργή ρίψη Φάσης Γ σε Α+Β υπό ισχυρή συνεχή ανάδευση. Homogenizer αν διαθέσιμος.",
+            "Συνεχής ανάδευση κατά την ψύξη — μη σταματάτε.",
+            "ΦΑΣΗ Δ — Κάτω από 40°C: PREMIX μαστίχας — διασπορά της Μαστίχας στο Avocado Oil που κρατήσατε (~40°C) μέχρι ομοιογένεια (αντικαθιστά τον ρόλο διαλύτη του Alcohol Denat).",
+            "Προσθήκη premix μαστίχας, Hippophae dry ext, Honey Extract — ανάδευση.",
+            "Phenoxyethanol/Caprylyl Glycol/EHG — ανάδευση 5 λεπτά.",
+            "QC: pH 5.5-6.5 | Υφή, χρώμα, ομοιογένεια | ΝΕΑ ΕΚΔΟΣΗ: απαιτείται challenge test (EN ISO 11930) και δοκιμή σταθερότητας λόγω αφαίρεσης Alcohol Denat.",
         ]
     },
 
