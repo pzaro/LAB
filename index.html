@@ -269,7 +269,7 @@
 <div class="container" id="mainApp">
     <div class="app-header">
         <h1>ZARKOLIA LAB</h1>
-        <span class="version">Production System v39</span>
+        <span class="version">Production System v40</span>
         <div class="font-ctrl">
             <span class="font-ctrl-label" style="font-size:.85em;">Α</span>
             <button class="font-btn" onclick="changeFontSize(-1)">−</button>
@@ -599,7 +599,7 @@ const recipes = {
         safetyNote: "Προϊόν φραγμού — υποψήφιο ιατροτεχνολογικό κλάσης I (Κανόνες 1 + 4). Φυσικά προστατευτικά ≈26% (Calamine 8 + Starch 8 + Petrolatum 8 + MAS 2). Για ξηρό, ερεθισμένο, σκασμένο δέρμα και μικρές επιφανειακές εκδορές. ΟΧΙ σε βαθιές, μολυσμένες ή αιμορραγούσες πληγές. Hypericum: αποφυγή έκθεσης στον ήλιο μετά την εφαρμογή.",
         ingredients: [
             { name: "--- ΦΑΣΗ Α (ΥΔΑΤΙΚΗ) ---", isHeader: true },
-            { name: "Aqua",                                        pct: 0,    isQS: true, note: "= 56.8%" },
+            { name: "Aqua",                                        pct: 0,    isQS: true, note: "= 57.0%" },
             { name: "Magnesium Aluminum Silicate",                 pct: 2.0 },
             { name: "Xanthan Gum",                                 pct: 0.5 },
             { name: "--- ΦΑΣΗ Β (ΣΚΟΝΕΣ) ---", isHeader: true },
@@ -616,7 +616,7 @@ const recipes = {
             { name: "Hippophae Rhamnoides Ext (dry 5:1)",          pct: 0.2 },
             { name: "Pistacia Lentiscus Extract/Gum (Μαστίχα)",   pct: 2.0 },
             { name: "Honey Extract",                               pct: 0.5 },
-            { name: "Phenoxyethanol/Caprylyl Glycol/EHG",         pct: 1.0 },
+            { name: "Euxyl PE 9010",                              pct: 0.8,  isNew: true, note: "αντί Phenoxyethanol/Caprylyl Glycol/EHG 1% — 0.72% phenoxyethanol" },
         ],
         instructions: [
             "ΦΑΣΗ Α — Θερμάνετε το νερό στους 80°C.",
@@ -628,7 +628,7 @@ const recipes = {
             "Συνεχής ανάδευση κατά την ψύξη — μη σταματάτε.",
             "ΦΑΣΗ Δ — Κάτω από 40°C: PREMIX μαστίχας — διασπορά της Μαστίχας στο Avocado Oil που κρατήσατε (~40°C) μέχρι ομοιογένεια (αντικαθιστά τον ρόλο διαλύτη του Alcohol Denat).",
             "Προσθήκη premix μαστίχας, Hippophae dry ext, Honey Extract — ανάδευση.",
-            "Phenoxyethanol/Caprylyl Glycol/EHG — ανάδευση 5 λεπτά.",
+            "Euxyl PE 9010 (0.8%) — ανάδευση 5 λεπτά.",
             "QC: pH 5.5-6.5 | Υφή, χρώμα, ομοιογένεια | ΝΕΑ ΕΚΔΟΣΗ: απαιτείται challenge test (EN ISO 11930) και δοκιμή σταθερότητας λόγω αφαίρεσης Alcohol Denat.",
         ]
     },
