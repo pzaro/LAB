@@ -269,7 +269,7 @@
 <div class="container" id="mainApp">
     <div class="app-header">
         <h1>ZARKOLIA LAB</h1>
-        <span class="version">Production System v38</span>
+        <span class="version">Production System v39</span>
         <div class="font-ctrl">
             <span class="font-ctrl-label" style="font-size:.85em;">Α</span>
             <button class="font-btn" onclick="changeFontSize(-1)">−</button>
@@ -286,11 +286,11 @@
             <optgroup label="— Zplast Classic —">
                 <option value="zplast_classic">ZPLAST CREAM Classic (CPNP)</option>
                 <option value="zplast_cream_wound_md">ZPLAST CREAM WOUND+ (Classic MD v1 — Barrier)</option>
-                <option value="zplast_classic_wound">ZPLAST CREAM Classic — Wound+ ΠΕΙΡΑΜΑΤΙΚΗ (Allantoin/Panthenol)</option>
+                <option value="zplast_classic_wound">ZPLAST CREAM Classic — Wound+ ΠΕΙΡΑΜΑΤΙΚΗ</option>
             </optgroup>
             <optgroup label="— Zplast Total Repair —">
                 <option value="zplast">Zplast Total Repair — Skin Repair (v34b)</option>
-                <option value="zplast_wound">Zplast Total Repair — Wound+ (Allantoin/Panthenol)</option>
+                <option value="zplast_wound">Zplast Total Repair — Wound+</option>
             </optgroup>
             <optgroup label="— Άλλα Σώματος —">
                 <option value="bruise">Bruise Off</option>
@@ -552,15 +552,15 @@ const recipes = {
 
     // ── ZPLAST CLASSIC WOUND+ ────────────────────────────────
     zplast_classic_wound: {
-        title: "ZPLAST CREAM — WOUND+ (ΠΕΙΡΑΜΑΤΙΚΗ)", desc: "Classic + Allantoin 0.5% + D-Panthenol 2%", initials: "ZW", shelfLife: 12, type: "standard",
-        woundNote: "Ενισχυμένη επουλωτική έκδοση. Allantoin: επιταχύνει επαναεπιθηλιοποίηση. D-Panthenol: επιδιόρθωση κυτταρικής μεμβράνης. Κατάλληλη για ανοιχτές καθαρές πληγές.",
+        title: "ZPLAST CREAM — WOUND+ (ΠΕΙΡΑΜΑΤΙΚΗ)", desc: "Classic — Allantoin/D-Panthenol προσωρινά εκτός", initials: "ZW", shelfLife: 12, type: "standard",
+        woundNote: "Πειραματική έκδοση. Allantoin και D-Panthenol προσωρινά εκτός — η σύνθεση είναι προς το παρόν ίδια με την Classic.",
         ingredients: [
             { name: "--- ΦΑΣΗ Α (ΥΔΑΤΙΚΗ) ---", isHeader: true },
             { name: "Aqua",                                        pct: 0,    isQS: true },
             { name: "Magnesium Aluminum Silicate",                 pct: 2.0 },
             { name: "Xanthan Gum",                                 pct: 0.5 },
-            { name: "Allantoin",                                   pct: 0.5,  isNew: true },
-            { name: "D-Panthenol",                                 pct: 2.0,  isNew: true },
+            // [ΕΚΤΟΣ — επαναφορά κατόπιν αιτήματος] { name: "Allantoin",                                   pct: 0.5,  isNew: true },
+            // [ΕΚΤΟΣ — επαναφορά κατόπιν αιτήματος] { name: "D-Panthenol",                                 pct: 2.0,  isNew: true },
             { name: "--- ΦΑΣΗ Β (ΣΚΟΝΕΣ) ---", isHeader: true },
             { name: "Calamine Powder",                             pct: 8.0 },
             { name: "Zea Mays Starch",                             pct: 8.0 },
@@ -582,9 +582,9 @@ const recipes = {
         ],
         instructions: [
             "ΦΑΣΗ Α — Θερμάνετε το νερό στους 80°C. Διασπορά Mg Al Silicate — ενυδάτωση 10-15 λεπτά.",
-            "Προσθήκη Xanthan Gum υπό ανάδευση.",
-            "Ψύξη στους 60°C — διάλυση Allantoin (απαιτεί ~60°C για πλήρη διάλυση, ανάδευση 5 λεπτά).",
-            "Προσθήκη D-Panthenol — ανάδευση μέχρι πλήρη ομοιόμορφη διανομή. Ψύξη στους 75°C.",
+            "Προσθήκη Xanthan Gum υπό ανάδευση. Ψύξη στους 75°C.",
+            // [ΕΚΤΟΣ] "Ψύξη στους 60°C — διάλυση Allantoin (απαιτεί ~60°C για πλήρη διάλυση, ανάδευση 5 λεπτά).",
+            // [ΕΚΤΟΣ] "Προσθήκη D-Panthenol — ανάδευση μέχρι πλήρη ομοιόμορφη διανομή. Ψύξη στους 75°C.",
             "ΦΑΣΗ Β — Ανάμειξη Calamine + Zea Mays. Ενσωμάτωση σε 3-4 δόσεις στη Φάση Α (75°C).",
             "ΦΑΣΗ Γ — Τήξη Petrolatum + Cetyl Alcohol 75°C. Προσθήκη Xalifin-15 + λαδιών.",
             "Ρίψη Φάσης Γ σε Α+Β υπό ισχυρή ανάδευση. Συνεχής ανάδευση κατά ψύξη.",
@@ -679,15 +679,15 @@ const recipes = {
 
     // ── ZPLAST TOTAL REPAIR — WOUND+ ────────────────────────
     zplast_wound: {
-        title: "ZPLAST TOTAL REPAIR — WOUND+", desc: "Wound Formula — Allantoin 0.5% + D-Panthenol 2%", initials: "ZR", shelfLife: 12, type: "standard",
-        woundNote: "Έκδοση για ανοιχτές καθαρές πληγές. Χωρίς Zea Mays, Alcohol, Parfum. Allantoin + D-Panthenol για μέγιστη επουλωτική δράση.",
+        title: "ZPLAST TOTAL REPAIR — WOUND+", desc: "Total Repair χωρίς Zea Mays / Alcohol / Parfum", initials: "ZR", shelfLife: 12, type: "standard",
+        woundNote: "Έκδοση Total Repair χωρίς Zea Mays, Alcohol, Parfum. Allantoin και D-Panthenol προσωρινά εκτός.",
         ingredients: [
             { name: "--- ΦΑΣΗ Α (ΥΔΑΤΙΚΗ) ---", isHeader: true },
             { name: "Aqua",                                        pct: 0,    isQS: true },
             { name: "Glycerin",                                    pct: 4.0 },
             { name: "Calamine Powder",                             pct: 5.0 },
             { name: "Sodium Hyaluronate 1%",                       pct: 1.0 },
-            { name: "Allantoin",                                   pct: 0.5,  isNew: true },
+            // [ΕΚΤΟΣ — επαναφορά κατόπιν αιτήματος] { name: "Allantoin",                                   pct: 0.5,  isNew: true },
             { name: "Citric Acid",                                 pct: 0.07 },
             { name: "--- ΦΑΣΗ Β (ΛΙΠΑΡΗ 75°C) ---", isHeader: true },
             { name: "Xalifin-15",                                  pct: 3.5 },
@@ -700,7 +700,7 @@ const recipes = {
             { name: "Hippophae Ext (dry 5:1)",                     pct: 0.2 },
             { name: "Centella Asiatica Ext",                       pct: 4.0 },
             { name: "Althaea Officinalis Root Ext",                pct: 2.0 },
-            { name: "D-Panthenol",                                 pct: 2.0,  isNew: true },
+            // [ΕΚΤΟΣ — επαναφορά κατόπιν αιτήματος] { name: "D-Panthenol",                                 pct: 2.0,  isNew: true },
             { name: "Mel (Honey)",                                 pct: 3.0 },
             { name: "Mastic in Olive Oil 20%",                     pct: 10.0, note: "= 2% μαστίχα + 8% ελαιόλαδο" },
             { name: "Euxyl PE 9010",                               pct: 0.5 },
@@ -709,13 +709,13 @@ const recipes = {
             "ΦΑΣΗ Α — Θερμάνετε το νερό στους 75°C. Διάλυση Glycerin.",
             "Διασπορά Calamine σταδιακά — ανάδευση μέχρι ομοιόμορφη κατανομή. (Χωρίς Zea Mays σε αυτή την έκδοση.)",
             "Προσθήκη Sodium Hyaluronate 1% solution.",
-            "Ψύξη στους 60°C — διάλυση Allantoin υπό ανάδευση 5 λεπτά (απαιτεί ~60°C).",
+            // [ΕΚΤΟΣ] "Ψύξη στους 60°C — διάλυση Allantoin υπό ανάδευση 5 λεπτά (απαιτεί ~60°C).",
             "Ρύθμιση pH με Citric Acid (στόχος 5.0-5.5 πριν emulsification).",
             "ΦΑΣΗ Β — Τήξη Cetostearyl Alcohol 75°C. Προσθήκη Xalifin-15, Paraffinum, Avocado, Vit E.",
             "EMULSIFICATION — Αργή ρίψη Β σε Α υπό ισχυρή ανάδευση. Homogenizer αν διαθέσιμος.",
             "Συνεχής ανάδευση κατά ψύξη.",
             "ΦΑΣΗ Γ — <40°C: Hypericum, Hippophae dry ext, Centella, Althaea Root Ext.",
-            "Προσθήκη D-Panthenol — ανάδευση 3 λεπτά.",
+            // [ΕΚΤΟΣ] "Προσθήκη D-Panthenol — ανάδευση 3 λεπτά.",
             "Προσθήκη Mel + Mastic/Olive Oil 20% — ανάδευση μέχρι πλήρη ενσωμάτωση.",
             "Euxyl PE 9010 — ανάδευση 5 λεπτά. (Χωρίς Alcohol/Parfum σε αυτή την έκδοση.)",
             "QC: pH στόχος 5.5-6.5 | Sterility check συνιστάται | Εφαρμογή μόνο σε καθαρές πληγές.",
