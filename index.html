@@ -137,6 +137,9 @@
         .syrup-input-wrap { flex:1; }
         .syrup-input-wrap input { padding:10px; font-size:1.1em; text-align:center; border-color:#86efac; color:#14532d; background:white; }
 
+        /* ARCHIVE BANNER */
+        .archive-banner { display:none; background:#fef3c7; border:2px solid #f59e0b; border-radius:12px; padding:14px 18px; margin-top:6px; color:#92400e; font-weight:700; font-size:.93em; line-height:1.55; }
+        .archive-banner strong { display:block; font-size:1.05em; margin-bottom:4px; }
         /* MATERIALS PANEL */
         #materialsPanel { display:none; background:white; border:1px solid var(--border-color); border-radius:20px; margin-top:20px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.06); }
         .materials-header { background:linear-gradient(135deg,#0f4c81,#1a6baa); color:white; padding:20px 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
@@ -343,8 +346,7 @@
                 <option value="hydralia">Hydralia Face</option>
             </optgroup>
             <optgroup label="— Σιρόπι —">
-                <option value="syrup_classic">ALVEOLAIR Classic (Φρουκτόζη + Βάμματα)</option>
-                <option value="syrup_custom">ALVEOLAIR v3 (Glycerol + Ξηρά Εκχυλίσματα)</option>
+                <option value="syrup_custom">ALVEOLAIR (Glycerol + Ξηρά Εκχυλίσματα)</option>
             </optgroup>
             <optgroup label="— Spray —">
                 <option value="zderm_gel">Z-Derm Aspis Gel (Ecopharm 95° → 70%)</option>
@@ -354,8 +356,15 @@
             <optgroup label="— Βάσεις —">
                 <option value="base">Βάση Gel-Cream</option>
             </optgroup>
+            <optgroup label="— 🗄️ Αρχείο Συνταγών —">
+                <option value="syrup_classic">ALVEOLAIR Classic [ΑΡΧΕΙΟ] (Φρουκτόζη + Βάμματα)</option>
+            </optgroup>
         </select>
 
+        <div class="archive-banner" id="archiveBanner">
+            <strong>🗄️ ΑΡΧΕΙΟ — Ανενεργή Συνταγή</strong>
+            Η συνταγή αυτή έχει αρχειοθετηθεί και αντικαταστάθηκε από νεότερη έκδοση. Ο υπολογισμός παραμένει διαθέσιμος για αναφορά. Για παραγωγή χρησιμοποίησε την ενεργή έκδοση.
+        </div>
         <div class="form-row" id="standardInput">
             <label class="form-label">2. Στόχος Παραγωγής (g)</label>
             <input type="number" id="totalWeightInput" value="1000" step="50">
@@ -889,7 +898,7 @@ const recipes = {
 
     // ── ALVEOLAIR CLASSIC (Φρουκτόζη + Βάμματα) ────────────────
     syrup_classic: {
-        title: "ALVEOLAIR CLASSIC", desc: "Φρουκτόζη 66.7% — Βάμματα", initials: "AC", shelfLife: 6, type: "standard", density: 1.30,
+        title: "ALVEOLAIR CLASSIC", desc: "Φρουκτόζη 66.7% — Βάμματα", initials: "AC", shelfLife: 6, type: "standard", density: 1.30, archived: true,
         safetyNote: "Παραδοσιακή φόρμουλα σιροπιού με φρουκτόζη και βάμματα. Συντηρητικό: Sodium Benzoate. pH <4.5.",
         ingredients: [
             { name: "Fructose / Brown Sugar",                           pct: 66.70 },
@@ -938,15 +947,16 @@ const recipes = {
             { name: "Κιτρικό οξύ (E330)",                                                 pct: 0.10,  note: "ρύθμιση pH — στόχος <4.5" },
         ],
         instructions: [
-            "ΠΡΟΕΤΟΙΜΑΣΙΑ ΕΚΧΥΛΙΣΜΑΤΩΝ — Προ-διάλυση κάθε ξηρού εκχυλίσματος χωριστά σε ελάχιστη ποσότητα ζεστού νερού (~60°C). Ανάδευση μέχρι πλήρη διάλυση.",
-            "Ζύγιση Γλυκερόλης σε ανοξείδωτο δοχείο. Ζύγιση Ύδατος (30.02g — σταθερό, όχι QS).",
-            "Ανάμειξη Γλυκερόλης + Ύδατος στους 40-50°C υπό ανάδευση.",
-            "Διάλυση Σορβικού Καλίου (E202) στο μίγμα.",
-            "Διάλυση Κιτρικού Οξέος (E330) — ανάδευση. Έλεγχος pH: στόχος <4.5.",
-            "ΕΚΧΥΛΙΣΜΑΤΑ <40°C: Αλθαία → Θυμάρι → Ευκάλυπτος → Ακερόλα → Ιπποφαές. Κάθε εκχύλισμα ξεχωριστά, ανάδευση μεταξύ.",
+            "ΖΥΓΙΣΗ — Ζύγιση όλων των συστατικών. Από τα 30.02g Ύδατος: ~20g αφορούν προ-διάλυση εκχυλισμάτων — τα υπόλοιπα ~10g για το κύριο μίγμα. Σημείωση: το Ύδωρ είναι σταθερό (δεν είναι QS).",
+            "ΠΡΟ-ΔΙΑΛΥΣΗ ΕΚΧΥΛΙΣΜΑΤΩΝ (~60°C) — Κάθε εκχύλισμα χωριστά στο ζεστό νερό (~60°C): Αλθαία → Θυμάρι → Ευκάλυπτος → Ακερόλα → Ιπποφαές. Ανάδευση μέχρι πλήρη διάλυση. Αφήνω να κρυώσουν (<40°C).",
+            "ΚΥΡΙΟ ΜΙΓΜΑ — Ζύγιση Γλυκερόλης + υπόλοιπο νερό (~10g) σε ανοξείδωτο δοχείο. Θέρμανση στους 40-50°C υπό ανάδευση.",
+            "ΣΥΝΤΗΡΗΤΙΚΟ — Διάλυση Σορβικού Καλίου (E202) στο μίγμα Γλυκερόλης/Νερού.",
+            "pH ΡΥΘΜΙΣΗ — Προσθήκη Κιτρικού Οξέος (E330) — ανάδευση. ⚠️ Σε διάλυμα 65% γλυκερόλης το pH-μετρο δίνει ψευδώς υψηλές ενδείξεις — μέτρα πάντα αφού αραιώσεις δείγμα 1:9 με απεσταγμένο νερό. Στόχος <4.5.",
+            "ΨΥΞΗ — Ψύξη μίγματος στους 35-38°C πριν από ενσωμάτωση εκχυλισμάτων.",
+            "ΕΚΧΥΛΙΣΜΑΤΑ (<40°C) — Ενσωμάτωση προ-διαλυμένων εκχυλισμάτων: Αλθαία → Θυμάρι → Ευκάλυπτος → Ακερόλα → Ιπποφαές. Κάθε εκχύλισμα ξεχωριστά, ανάδευση μεταξύ.",
             "Προσθήκη Ασκορβικού Οξέος — ανάδευση μέχρι πλήρη διάλυση.",
-            "Τελικός έλεγχος pH — στόχος <4.5. Αν χρειαστεί: μικρή προσαρμογή Κιτρικού Οξέος.",
-            "QC: pH <4.5 | Refractometer (°Bx) | Χρώμα, διαύγεια, οσμή, γεύση | Σύνολο = 100.00g ✓",
+            "ΤΕΛΙΚΟΣ ΕΛΕΓΧΟΣ pH — Αραίωση δείγματος 1:9 με απεσταγμένο νερό, μέτρηση pH. Στόχος <4.5. Ρύθμιση με Κιτρικό Οξύ αν χρειαστεί.",
+            "QC: pH <4.5 (μέτρηση 1:9 αραίωση) | Refractometer (°Bx) | Χρώμα, διαύγεια, οσμή, γεύση | Σύνολο = 100.00g ✓",
         ]
     },
     // ── Z-DERM ASPIS GEL (Ecopharm 95°) ───────────────────────
@@ -1072,12 +1082,15 @@ const recipes = {
 // UI LOGIC
 // ============================================================
 function toggleInputs() {
-    const key = document.getElementById('recipeSelect').value;
-    const isCap   = recipes[key]?.type === 'capsule';
-    const isSyrup = key === 'syrup_classic' || key === 'syrup_custom';
+    const key    = document.getElementById('recipeSelect').value;
+    const recipe = recipes[key];
+    const isCap      = recipe?.type === 'capsule';
+    const isSyrup    = key === 'syrup_classic' || key === 'syrup_custom';
+    const isArchived = recipe?.archived === true;
     document.getElementById('standardInput').style.display  = isCap ? 'none' : 'block';
     document.getElementById('capsuleInput').style.display   = isCap ? 'block' : 'none';
     document.getElementById('syrupInput').style.display     = isSyrup ? 'block' : 'none';
+    document.getElementById('archiveBanner').style.display  = isArchived ? 'block' : 'none';
     document.getElementById('resultContainer').style.display = 'none';
     document.getElementById('materialsPanel').style.display  = 'none';
     if (isSyrup) {
