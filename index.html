@@ -129,6 +129,32 @@
         .lbl2-val { font-size:9pt; font-weight:900; font-family:monospace; color:#000; }
         .lbl2-divider { width:1px; height:22px; background:#ccc; margin:0 2px; }
 
+        /* SYRUP BOTTLES */
+        .syrup-panel { background:#f0fdf4; padding:16px; border-radius:12px; border:2px solid #86efac; margin-top:4px; }
+        .syrup-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px dashed #bbf7d0; padding-bottom:12px; }
+        .syrup-row:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+        .syrup-label { font-weight:700; color:#14532d; flex:2; font-size:1em; }
+        .syrup-input-wrap { flex:1; }
+        .syrup-input-wrap input { padding:10px; font-size:1.1em; text-align:center; border-color:#86efac; color:#14532d; background:white; }
+
+        /* MATERIALS PANEL */
+        #materialsPanel { display:none; background:white; border:1px solid var(--border-color); border-radius:20px; margin-top:20px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,.06); }
+        .materials-header { background:linear-gradient(135deg,#0f4c81,#1a6baa); color:white; padding:20px 24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+        .materials-header h3 { margin:0; font-size:1.1em; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; }
+        .btn-mat-pdf { background:#e8a020; color:white; border:none; padding:10px 18px; border-radius:10px; font-weight:800; font-size:.88em; cursor:pointer; letter-spacing:1px; text-transform:uppercase; flex:none; min-width:unset; box-shadow:none; }
+        .btn-mat-pdf:hover { background:#c8880e; transform:none; }
+        .mat-print-header { display:none; padding:8px 18px; font-size:9.5pt; border-bottom:2px solid #000; font-weight:700; font-family:var(--font-mono); }
+        .mat-table-wrapper { overflow-x:auto; }
+        .mat-table { width:100%; border-collapse:collapse; font-size:.95em; }
+        .mat-table th { background:#f6f8fc; padding:10px 14px; text-align:left; color:var(--text-muted); font-size:.75em; text-transform:uppercase; letter-spacing:1px; font-weight:700; border-bottom:2px solid var(--border-color); }
+        .mat-table td { padding:11px 14px; border-bottom:1px solid #f1f4f8; vertical-align:middle; }
+        .mat-table .mat-total-row td { background:#f0fdf7; color:var(--success); font-weight:800; border-top:2px solid #a7f3d0; }
+        .mat-num { width:5%; text-align:center; color:var(--text-muted); font-size:.85em; font-family:var(--font-mono); }
+        .mat-name-col { font-weight:700; }
+        .mat-qty-col { text-align:right; font-weight:800; color:var(--success); font-family:var(--font-mono); font-size:1.05em; }
+        .mat-note-col { color:var(--text-muted); font-size:.85em; font-weight:500; }
+        .mat-bottles-info { padding:10px 18px; background:#eff6ff; border-bottom:1px solid #bfdbfe; color:#1e40af; font-weight:700; font-size:.92em; }
+
         @media (max-width:640px) {
             body { padding:12px; font-size:15px; }
             .control-panel { padding:20px 16px; }
@@ -228,6 +254,19 @@
             input[type="checkbox"] { -webkit-print-color-adjust:exact; color-adjust:exact; }
             body.print-label-mode #resultContainer { display:none !important; }
             body.print-label-mode #labelPreview { display:block !important; position:fixed; top:0; left:0; width:100mm; height:62mm; border:none !important; margin:0; padding:1mm; }
+            /* MATERIALS-ONLY PDF */
+            body.print-materials-mode .app-header,
+            body.print-materials-mode .control-panel,
+            body.print-materials-mode #labelPreview,
+            body.print-materials-mode .stock-panel,
+            body.print-materials-mode #resultContainer { display:none !important; }
+            body.print-materials-mode #materialsPanel { display:block !important; border:none !important; box-shadow:none !important; border-radius:0; width:100%; }
+            body.print-materials-mode .btn-mat-pdf { display:none !important; }
+            body.print-materials-mode .mat-print-header { display:block !important; }
+            body.print-materials-mode .materials-header { background:#1a3272 !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; padding:8px 16px; }
+            body.print-materials-mode .mat-table { font-size:10pt; }
+            body.print-materials-mode .mat-table th { background:#f0f0f0 !important; -webkit-print-color-adjust:exact; }
+            body.print-materials-mode .mat-table .mat-total-row td { background:#e8f5e9 !important; -webkit-print-color-adjust:exact; }
         }
     </style>
 </head>
@@ -321,6 +360,23 @@
             <label class="form-label">2. Στόχος Παραγωγής (g)</label>
             <input type="number" id="totalWeightInput" value="1000" step="50">
         </div>
+        <div class="form-row" style="display:none;" id="syrupInput">
+            <label class="form-label">2β. Αριθμός Φιαλών</label>
+            <div class="syrup-panel">
+                <div class="syrup-row">
+                    <span class="syrup-label">Όγκος φιάλης (ml)</span>
+                    <div class="syrup-input-wrap"><input type="number" id="bottleVolume" value="150" step="25" min="50" oninput="updateFromBottles()"></div>
+                </div>
+                <div class="syrup-row">
+                    <span class="syrup-label">Αριθμός φιαλών</span>
+                    <div class="syrup-input-wrap"><input type="number" id="bottleCount" value="0" step="1" min="0" oninput="updateFromBottles()"></div>
+                </div>
+                <div class="syrup-row" id="syrupTotalRow" style="display:none; background:#dcfce7; border-radius:8px; padding:8px 12px;">
+                    <span class="syrup-label">→ Σύνολο παρτίδας</span>
+                    <span style="font-size:1.15em; font-weight:800; color:#15803d;" id="syrupTotalDisplay">—</span>
+                </div>
+            </div>
+        </div>
         <div class="form-row" style="display:none;" id="capsuleInput">
             <label class="form-label">2. Υπολογισμός Καψουλών</label>
             <div class="caps-panel">
@@ -398,6 +454,7 @@
     </div>
 
     <div id="resultContainer"></div>
+    <div id="materialsPanel"></div>
 </div>
 
 <script>
@@ -832,7 +889,7 @@ const recipes = {
 
     // ── ALVEOLAIR CLASSIC (Φρουκτόζη + Βάμματα) ────────────────
     syrup_classic: {
-        title: "ALVEOLAIR CLASSIC", desc: "Φρουκτόζη 66.7% — Βάμματα", initials: "AC", shelfLife: 6, type: "standard",
+        title: "ALVEOLAIR CLASSIC", desc: "Φρουκτόζη 66.7% — Βάμματα", initials: "AC", shelfLife: 6, type: "standard", density: 1.30,
         safetyNote: "Παραδοσιακή φόρμουλα σιροπιού με φρουκτόζη και βάμματα. Συντηρητικό: Sodium Benzoate. pH <4.5.",
         ingredients: [
             { name: "Fructose / Brown Sugar",                           pct: 66.70 },
@@ -864,7 +921,7 @@ const recipes = {
 
     // ── ALVEOLAIR ────────────────────────────────────────────
     syrup_custom: {
-        title: "ALVEOLAIR", desc: "Glycerol-based — Ξηρά Εκχυλίσματα v3", initials: "AL", shelfLife: 6, type: "standard",
+        title: "ALVEOLAIR", desc: "Glycerol-based — Ξηρά Εκχυλίσματα v3", initials: "AL", shelfLife: 6, type: "standard", density: 1.18,
         safetyNote: "Γλυκερολικό διάλυμα. Χωρίς σάκχαρα. Ξηρά τυποποιημένα εκχυλίσματα αντί βαμμάτων. Συντηρητικό: Σορβικό Κάλιο (E202).",
         ingredients: [
             { name: "Γλυκερόλη (E422)",                                                    pct: 65.00 },
@@ -1016,10 +1073,17 @@ const recipes = {
 // ============================================================
 function toggleInputs() {
     const key = document.getElementById('recipeSelect').value;
-    const isCap = recipes[key]?.type === 'capsule';
-    document.getElementById('standardInput').style.display = isCap ? 'none' : 'block';
-    document.getElementById('capsuleInput').style.display = isCap ? 'block' : 'none';
+    const isCap   = recipes[key]?.type === 'capsule';
+    const isSyrup = key === 'syrup_classic' || key === 'syrup_custom';
+    document.getElementById('standardInput').style.display  = isCap ? 'none' : 'block';
+    document.getElementById('capsuleInput').style.display   = isCap ? 'block' : 'none';
+    document.getElementById('syrupInput').style.display     = isSyrup ? 'block' : 'none';
     document.getElementById('resultContainer').style.display = 'none';
+    document.getElementById('materialsPanel').style.display  = 'none';
+    if (isSyrup) {
+        document.getElementById('syrupTotalRow').style.display = 'none';
+        document.getElementById('bottleCount').value = '0';
+    }
 }
 
 
@@ -1309,7 +1373,13 @@ function calculate() {
     } else {
         weight = parseFloat(document.getElementById('totalWeightInput').value);
         if (!weight || weight <= 0) return alert("Λάθος ποσότητα.");
-        info = `ΣΤΟΧΟΣ ΠΑΡΑΓΩΓΗΣ: ${weight.toLocaleString('el-GR')} γραμμάρια`;
+        const _bCnt = parseFloat(document.getElementById('bottleCount')?.value) || 0;
+        const _bVol = parseFloat(document.getElementById('bottleVolume')?.value) || 0;
+        if ((key === 'syrup_classic' || key === 'syrup_custom') && _bCnt > 0 && _bVol > 0) {
+            info = `ΣΤΟΧΟΣ: ${_bCnt} φιάλες × ${_bVol} ml = ${weight.toLocaleString('el-GR')} g`;
+        } else {
+            info = `ΣΤΟΧΟΣ ΠΑΡΑΓΩΓΗΣ: ${weight.toLocaleString('el-GR')} γραμμάρια`;
+        }
     }
 
     const now = new Date();
@@ -1413,7 +1483,85 @@ function calculate() {
     res.innerHTML = html;
     res.style.display = 'block';
     togglePrintMode();
+
+    // ── ΠΙΝΑΚΑΣ ΠΡΩΤΩΝ ΥΛΩΝ ─────────────────────────────────────
+    const matPanel = document.getElementById('materialsPanel');
+    const _bCnt2 = parseFloat(document.getElementById('bottleCount')?.value) || 0;
+    const _bVol2 = parseFloat(document.getElementById('bottleVolume')?.value) || 0;
+    const isSyrupRec = key === 'syrup_classic' || key === 'syrup_custom';
+    let bottlesInfoHtml = '';
+    if (isSyrupRec && _bCnt2 > 0 && _bVol2 > 0) {
+        bottlesInfoHtml = `<div class="mat-bottles-info">🍶 ${_bCnt2} φιάλες × ${_bVol2} ml &nbsp;·&nbsp; Παρτίδα: <strong>${weight.toLocaleString('el-GR')} g</strong></div>`;
+    }
+    let matIdx = 0, matTotal = 0, matRows = '';
+    recipe.ingredients.forEach(i => {
+        if (i.isHeader) return;
+        const fp  = i.isQS ? Math.max(0, 100 - sumPct) : i.pct;
+        const amt = fp / 100 * weight;
+        matTotal += amt;
+        matIdx++;
+        matRows += `<tr>
+            <td class="mat-num">${matIdx}</td>
+            <td class="mat-name-col">${i.name}</td>
+            <td class="mat-qty-col">${amt.toFixed(2)} g</td>
+            <td class="mat-note-col">${i.note||''}</td>
+        </tr>`;
+    });
+    matPanel.innerHTML = `
+        <div class="mat-print-header">ZARKOLIA LAB — ΠΙΝΑΚΑΣ ΠΡΩΤΩΝ ΥΛΩΝ &nbsp;|&nbsp; ${recipe.title} &nbsp;|&nbsp; Παρτίδα: ${lotNo} &nbsp;|&nbsp; ${printDate}</div>
+        <div class="materials-header">
+            <h3>📋 Πίνακας Πρώτων Υλών</h3>
+            <button class="btn-mat-pdf" onclick="printMaterials()">🖨️ PDF Υλικών</button>
+        </div>
+        ${bottlesInfoHtml}
+        <div class="mat-table-wrapper">
+            <table class="mat-table">
+                <thead>
+                    <tr>
+                        <th class="mat-num">Α/Α</th>
+                        <th>Πρώτη Ύλη</th>
+                        <th style="text-align:right;">Ποσότητα</th>
+                        <th>Σημειώσεις</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${matRows}
+                    <tr class="mat-total-row">
+                        <td colspan="2" style="text-align:right;padding-right:20px;font-weight:700;">ΣΥΝΟΛΟ:</td>
+                        <td class="mat-qty-col">${matTotal.toFixed(2)} g</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>`;
+    matPanel.style.display = 'block';
+
     res.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function printMaterials() {
+    document.body.classList.add('print-materials-mode');
+    window.print();
+    setTimeout(() => document.body.classList.remove('print-materials-mode'), 500);
+}
+
+function updateFromBottles() {
+    const key = document.getElementById('recipeSelect').value;
+    const recipe = recipes[key];
+    if (!recipe) return;
+    const vol     = parseFloat(document.getElementById('bottleVolume').value) || 0;
+    const cnt     = parseFloat(document.getElementById('bottleCount').value)  || 0;
+    const density = recipe.density || 1.0;
+    const totalG  = Math.round(vol * cnt * density);
+    const totalRow  = document.getElementById('syrupTotalRow');
+    const totalDisp = document.getElementById('syrupTotalDisplay');
+    if (cnt > 0 && vol > 0) {
+        if (totalDisp) totalDisp.textContent = totalG + ' g  (' + cnt + ' × ' + vol + ' ml × ' + density + ')';
+        if (totalRow)  totalRow.style.display = 'flex';
+        document.getElementById('totalWeightInput').value = totalG;
+    } else {
+        if (totalRow) totalRow.style.display = 'none';
+    }
 }
 </script>
 </body>
