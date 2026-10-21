@@ -1366,6 +1366,7 @@ function recalcFromIngredient(el) {
     var targetEl = document.getElementById('revTargetInfo');
     if (targetEl) targetEl.textContent = 'ΣΤΟΧΟΣ: ' + newTotal.toFixed(1) + ' g ← reverse';
     document.getElementById('totalWeightInput').value = Math.round(newTotal * 10) / 10;
+    updateBottlesFromTotal();
 }
 
 
