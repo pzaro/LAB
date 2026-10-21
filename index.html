@@ -373,8 +373,11 @@
             <label class="form-label">2β. Αριθμός Φιαλών</label>
             <div class="syrup-panel">
                 <div class="syrup-row">
-                    <span class="syrup-label">Όγκος φιάλης (ml)</span>
-                    <div class="syrup-input-wrap"><input type="number" id="bottleVolume" value="150" step="25" min="50" oninput="updateFromBottles()"></div>
+                    <span class="syrup-label">Φιάλη</span>
+                    <div class="syrup-input-wrap" style="display:flex;gap:6px;align-items:center;">
+                        <input type="number" id="bottleVolume" value="200" step="25" min="1" oninput="updateFromBottles()" style="flex:1;">
+                        <button id="bottleUnitBtn" onclick="toggleBottleUnit()" title="Εναλλαγή μονάδας ml / g" style="padding:5px 10px;border:1.5px solid #1e40af;background:#eff6ff;color:#1e40af;border-radius:6px;font-weight:700;cursor:pointer;min-width:44px;font-size:.88em;line-height:1;">ml</button>
+                    </div>
                 </div>
                 <div class="syrup-row">
                     <span class="syrup-label">Αριθμός φιαλών</span>
@@ -1386,10 +1389,11 @@ function calculate() {
     } else {
         weight = parseFloat(document.getElementById('totalWeightInput').value);
         if (!weight || weight <= 0) return alert("Λάθος ποσότητα.");
-        const _bCnt = parseFloat(document.getElementById('bottleCount')?.value) || 0;
-        const _bVol = parseFloat(document.getElementById('bottleVolume')?.value) || 0;
+        const _bCnt  = parseFloat(document.getElementById('bottleCount')?.value) || 0;
+        const _bVol  = parseFloat(document.getElementById('bottleVolume')?.value) || 0;
+        const _bUnit = (document.getElementById('bottleUnitBtn')?.textContent || 'ml').trim();
         if ((key === 'syrup_classic' || key === 'syrup_custom') && _bCnt > 0 && _bVol > 0) {
-            info = `ΣΤΟΧΟΣ: ${_bCnt} φιάλες × ${_bVol} ml = ${weight.toLocaleString('el-GR')} g`;
+            info = `ΣΤΟΧΟΣ: ${_bCnt} φιάλες × ${_bVol} ${_bUnit} = ${weight.toLocaleString('el-GR')} g`;
         } else {
             info = `ΣΤΟΧΟΣ ΠΑΡΑΓΩΓΗΣ: ${weight.toLocaleString('el-GR')} γραμμάρια`;
         }
@@ -1499,12 +1503,13 @@ function calculate() {
 
     // ── ΠΙΝΑΚΑΣ ΠΡΩΤΩΝ ΥΛΩΝ ─────────────────────────────────────
     const matPanel = document.getElementById('materialsPanel');
-    const _bCnt2 = parseFloat(document.getElementById('bottleCount')?.value) || 0;
-    const _bVol2 = parseFloat(document.getElementById('bottleVolume')?.value) || 0;
+    const _bCnt2  = parseFloat(document.getElementById('bottleCount')?.value) || 0;
+    const _bVol2  = parseFloat(document.getElementById('bottleVolume')?.value) || 0;
+    const _bUnit2 = (document.getElementById('bottleUnitBtn')?.textContent || 'ml').trim();
     const isSyrupRec = key === 'syrup_classic' || key === 'syrup_custom';
     let bottlesInfoHtml = '';
     if (isSyrupRec && _bCnt2 > 0 && _bVol2 > 0) {
-        bottlesInfoHtml = `<div class="mat-bottles-info">🍶 ${_bCnt2} φιάλες × ${_bVol2} ml &nbsp;·&nbsp; Παρτίδα: <strong>${weight.toLocaleString('el-GR')} g</strong></div>`;
+        bottlesInfoHtml = `<div class="mat-bottles-info">🍶 ${_bCnt2} φιάλες × ${_bVol2} ${_bUnit2} &nbsp;·&nbsp; Παρτίδα: <strong>${weight.toLocaleString('el-GR')} g</strong></div>`;
     }
     let matIdx = 0, matTotal = 0, matRows = '';
     recipe.ingredients.forEach(i => {
@@ -1572,18 +1577,33 @@ function printMaterials() {
     setTimeout(() => document.body.classList.remove('print-materials-mode'), 500);
 }
 
+function toggleBottleUnit() {
+    const btn = document.getElementById('bottleUnitBtn');
+    if (!btn) return;
+    const nowGrams = btn.textContent.trim() === 'ml';
+    btn.textContent = nowGrams ? 'g' : 'ml';
+    btn.style.background = nowGrams ? '#dcfce7' : '#eff6ff';
+    btn.style.color      = nowGrams ? '#166534' : '#1e40af';
+    btn.style.borderColor= nowGrams ? '#16a34a' : '#1e40af';
+    updateFromBottles();
+}
+
 function updateFromBottles() {
     const key = document.getElementById('recipeSelect').value;
     const recipe = recipes[key];
     if (!recipe) return;
-    const vol     = parseFloat(document.getElementById('bottleVolume').value) || 0;
+    const val     = parseFloat(document.getElementById('bottleVolume').value) || 0;
     const cnt     = parseFloat(document.getElementById('bottleCount').value)  || 0;
+    const unit    = (document.getElementById('bottleUnitBtn')?.textContent || 'ml').trim();
     const density = recipe.density || 1.0;
-    const totalG  = Math.round(vol * cnt * density);
+    const totalG  = unit === 'g' ? Math.round(val * cnt) : Math.round(val * cnt * density);
     const totalRow  = document.getElementById('syrupTotalRow');
     const totalDisp = document.getElementById('syrupTotalDisplay');
-    if (cnt > 0 && vol > 0) {
-        if (totalDisp) totalDisp.textContent = totalG + ' g  (' + cnt + ' × ' + vol + ' ml × ' + density + ')';
+    if (cnt > 0 && val > 0) {
+        const detailStr = unit === 'g'
+            ? `${cnt} × ${val} g`
+            : `${cnt} × ${val} ml × ${density}`;
+        if (totalDisp) totalDisp.textContent = totalG + ' g  (' + detailStr + ')';
         if (totalRow)  totalRow.style.display = 'flex';
         document.getElementById('totalWeightInput').value = totalG;
     } else {
