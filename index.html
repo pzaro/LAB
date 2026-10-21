@@ -367,7 +367,7 @@
         </div>
         <div class="form-row" id="standardInput">
             <label class="form-label">2. Στόχος Παραγωγής (g)</label>
-            <input type="number" id="totalWeightInput" value="1000" step="50">
+            <input type="number" id="totalWeightInput" value="1000" step="50" oninput="updateBottlesFromTotal()">
         </div>
         <div class="form-row" style="display:none;" id="syrupInput">
             <label class="form-label">2β. Αριθμός Φιαλών</label>
@@ -1619,6 +1619,21 @@ function updateFromBottles() {
     } else {
         if (totalRow) totalRow.style.display = 'none';
     }
+}
+
+function updateBottlesFromTotal() {
+    const key = document.getElementById('recipeSelect').value;
+    if (key !== 'syrup_classic' && key !== 'syrup_custom') return;
+    const total    = parseFloat(document.getElementById('totalWeightInput').value) || 0;
+    const gPerBot  = parseFloat(document.getElementById('bottleVolumeG').value)    || 0;
+    const mlPerBot = parseFloat(document.getElementById('bottleVolumeML').value)   || 0;
+    if (total <= 0 || gPerBot <= 0) return;
+    const cnt = Math.round(total / gPerBot);
+    document.getElementById('bottleCount').value = cnt;
+    const totalRow  = document.getElementById('syrupTotalRow');
+    const totalDisp = document.getElementById('syrupTotalDisplay');
+    if (totalDisp) totalDisp.textContent = `${total} g  (${cnt} × ${gPerBot} g = ${cnt} × ${mlPerBot.toFixed ? mlPerBot.toFixed(1) : mlPerBot} ml)`;
+    if (totalRow)  totalRow.style.display = 'flex';
 }
 </script>
 </body>
